@@ -91,7 +91,7 @@
         <xref target="RFC8182" section="3.1"/> describes how discrete publication events such as the addition, modification, or deletion of one or more repository objects <em>can</em> be communicated as immutable files, highlighting advantages for publishers such as the ability to pre-calculate files and make use of caching infrastructure.
       </t>
       <t>
-        However, if an RRDP server throughout time serves differing data for a given session_id and serial number, distinct RP instances (depending on the moment they connected to the RRDP server) would end up with divergent local repositories.
+        However, if an RRDP server over time serves differing data for a given session_id and serial number, distinct RP instances (depending on the moment they connected to the RRDP server) would end up with divergent local repositories.
         Comparing the server-provided session_id and serial numbers across distinct RP instances would not bring such divergence to light.
       </t>
       <t>
