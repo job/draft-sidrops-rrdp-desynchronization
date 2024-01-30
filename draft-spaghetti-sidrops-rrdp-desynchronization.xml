@@ -58,7 +58,7 @@
 
     <abstract>
       <t>
-        This document describes an approach for Resource Public Key Infrastructure (RPKI) Relying Parties to detect a particular form of RPKI Repository Delta Protocol (RRDP) session desynchronization and recover accordingly, as implemented in OpenBSD's rpki-client validator.
+        This document describes an approach for Resource Public Key Infrastructure (RPKI) Relying Parties to detect a particular form of RPKI Repository Delta Protocol (RRDP) session desynchronization and how to recover, as implemented in OpenBSD's rpki-client validator.
       </t>
     </abstract>
   </front>
@@ -74,7 +74,7 @@
       </t>
 
       <t>
-        This document describes an approach for Relying Parties (RPs) to detect a particular form of RRDP session desynchronization and recover accordingly, as implemented in OpenBSD's rpki-client validator.
+        This document describes an approach for Relying Parties (RPs) to detect a particular form of RRDP session desynchronization and how to recover, as implemented in OpenBSD's rpki-client validator.
       </t>
 
       <section anchor="requirements">
@@ -88,10 +88,10 @@
     <section anchor="immutability">
       <name>Immutability of RRDP files</name>
       <t>
-        <xref target="RFC8182" section="3.1"/> describes how discrete publication events such as the addition, modification, or deletion of one or more repository objects <em>can</em> be communicated as immutable files, highlighting advantages for publishers such as the abilitiy to pre-calculate files and make use of caching infrastructure.
+        <xref target="RFC8182" section="3.1"/> describes how discrete publication events such as the addition, modification, or deletion of one or more repository objects <em>can</em> be communicated as immutable files, highlighting advantages for publishers such as the ability to pre-calculate files and make use of caching infrastructure.
       </t>
       <t>
-        However, if a RRDP server throughout time serves differing data for a given session_id and serial number, distinct RP instances (depending on the moment they connected to the RRDP server) would to end up with divergent local repositories.
+        However, if an RRDP server throughout time serves differing data for a given session_id and serial number, distinct RP instances (depending on the moment they connected to the RRDP server) would end up with divergent local repositories.
         Comparing the server-provided session_id and serial numbers across distinct RP instances would not bring such divergence to light.
       </t>
       <t>
@@ -106,7 +106,7 @@
     <section anchor="detection">
       <name>Detection of Desynchronization</name>
       <t>
-        Relying Parties can implement a mechanism to keep a record the serial and hash attribute values in delta elements of the previous successful fetch of an Update Notification File.
+        Relying Parties can implement a mechanism to keep a record of the serial and hash attribute values in delta elements of the previous successful fetch of an Update Notification File.
         Then, after the next fetch of the Update Notification File compare whether the delta hash values associated to previously seen serials are different in the newly fetched Update Notification File.
         If any difference is detected, Delta files were unexpectedly mutated, and the RP should proceed to <xref target="recovery"/>.
       </t>
@@ -126,7 +126,7 @@
     <section anchor="security">
       <name>Security Considerations</name>
       <t>
-        Caches in a desynchronized state pose a risk in that they might emit less Validated Payloads than they would otherwise with a consistent copy of the repository.
+        Caches in a desynchronized state pose a risk in that they might emit fewer Validated Payloads than they would otherwise with a consistent copy of the repository.
         Missing Validated Payloads negatively impact the ability to validate BGP announcements <xref target="RFC6811"/>.
       </t>
       <t>
@@ -182,8 +182,8 @@
       </t>
       <t>
         The authors wish to thank
-        <contact fullname="..."/>
-        for their feedback.
+        <contact fullname="Theo Buehler"/>
+        for their careful review and feedback.
       </t>
     </section>
 
