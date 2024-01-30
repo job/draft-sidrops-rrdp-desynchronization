@@ -126,12 +126,12 @@
     <section anchor="security">
       <name>Security Considerations</name>
       <t>
-        Caches in a desynchronized state pose a risk in that they might emit fewer Validated Payloads than they would otherwise with a consistent copy of the repository.
+        Caches in a desynchronized state pose a risk in that they might emit fewer Validated Payloads than they would otherwise emit with a consistent copy of the repository.
         Missing Validated Payloads negatively impact the ability to validate BGP announcements <xref target="RFC6811"/>.
       </t>
       <t>
         <xref target="RFC9286" section="6.6"/> describes the concept of <em>failed fetches</em> and advises RP implementations to continue to use cached versions of objects, but only until such time as they become stale.
-        By detecting whether the remote Repository Server is in an inconsistent state and immediately switching to a using Snapshot File, RPs increase the their likeliness to replace objects before they become stale.
+        By detecting whether the remote Repository Server is in an inconsistent state and then immediately switching to using the latest Snapshot File, RPs increase the probability to successfully replace objects before they become stale.
       </t>
     </section>
 
