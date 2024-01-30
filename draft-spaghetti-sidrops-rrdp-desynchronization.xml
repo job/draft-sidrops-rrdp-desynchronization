@@ -178,17 +178,13 @@
       <name>Acknowledgements</name>
       <t>
         During the hallway track at RIPE 86, <contact fullname="Ties de Kock"/> shared the idea for detecting this particular form of RRDP desynchronization, after which <contact fullname="Claudio Jeker"/>, <contact fullname="Job Snijders"/>, and <contact fullname="Theo Buehler"/> produced an implementation based on rpki-client.
-      </t>
-      <t>
         Equipped with tooling to detect this particular error condition, in subsequent months it became apparent that unexpected delta mutations in the global RPKI repositories do happen from time to time.
       </t>
-<!--
       <t>
         The authors wish to thank
         <contact fullname="..."/>
-        for feedback.
+        for their feedback.
       </t>
--->
     </section>
 
     <section removeInRFC="true">
