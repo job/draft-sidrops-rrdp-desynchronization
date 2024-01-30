@@ -1,0 +1,218 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE rfc [
+ <!ENTITY nbsp "&#160;">
+]>
+
+<?rfc sortrefs="yes"?>
+<?rfc subcompact="no"?>
+<?rfc symrefs="yes"?>
+<?rfc toc="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude"
+     category="info"
+     docName="draft-spaghetti-sidrops-rrdp-desynchronization-00"
+     ipr="trust200902"
+     xml:lang="en"
+     sortRefs="true"
+     submissionType="IETF"
+     consensus="true"
+     version="3">
+
+  <front>
+
+    <title>Detecting RRDP Session Desynchronization</title>
+
+    <author fullname="Job Snijders" initials="J." surname="Snijders">
+      <organization>Fastly</organization>
+      <address>
+        <postal>
+          <street/>
+          <code/>
+          <city>Amsterdam</city>
+          <country>Netherlands</country>
+        </postal>
+        <email>job@fastly.com</email>
+      </address>
+    </author>
+
+    <author fullname="Ties de Kock" initials="T." surname="de Kock">
+      <organization>RIPE NCC</organization>
+      <address>
+        <postal />
+        <email>tdekock@ripe.net</email>
+      </address>
+    </author>
+
+    <date />
+
+    <area>ops</area>
+    <workgroup>SIDROPS</workgroup>
+
+    <keyword>desynchronization</keyword>
+    <keyword>RPKI</keyword>
+    <keyword>RRDP</keyword>
+
+    <abstract>
+      <t>
+        This document describes an approach for Resource Public Key Infrastructure (RPKI) Relying Parties to detect a particular form of RPKI Repository Delta Protocol (RRDP) session desynchronization and recover accordingly, as implemented in OpenBSD's rpki-client validator.
+      </t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="intro">
+      <name>Introduction</name>
+
+      <t>
+        The Resource Public Key Infrastructure (RPKI) Repository Delta Protocol (RRDP) <xref target="RFC8182"/> is a one-way synchronization protocol for distributing RPKI data in the form of <em>differences</em> (deltas) between sequential repository states.
+        Relying Parties apply a contiguous chain of deltas to synchronize their local copy of the repository with the current state of the remote Repository Server.
+        Delta files for any given session_id and serial number are expected to contain an immutable record of the state of the Repository Server at that given point in time, but this is not always the case.
+      </t>
+
+      <t>
+        This document describes an approach for Relying Parties (RPs) to detect a particular form of RRDP session desynchronization and recover accordingly, as implemented in OpenBSD's rpki-client validator.
+      </t>
+
+      <section anchor="requirements">
+        <name>Requirements Language</name>
+        <t>
+          The key words "<bcp14>MUST</bcp14>", "<bcp14>MUST NOT</bcp14>", "<bcp14>REQUIRED</bcp14>", "<bcp14>SHALL</bcp14>", "<bcp14>SHALL NOT</bcp14>", "<bcp14>SHOULD</bcp14>", "<bcp14>SHOULD NOT</bcp14>", "<bcp14>RECOMMENDED</bcp14>", "<bcp14>NOT RECOMMENDED</bcp14>", "<bcp14>MAY</bcp14>", and "<bcp14>OPTIONAL</bcp14>" in this document are to be interpreted as described in BCP&nbsp;14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they appear in all capitals, as shown here.
+        </t>
+      </section>
+    </section>
+
+    <section anchor="immutability">
+      <name>Immutability of RRDP files</name>
+      <t>
+        <xref target="RFC8182" section="3.1"/> describes how discrete publication events such as the addition, modification, or deletion of one or more repository objects <em>can</em> be communicated as immutable files, highlighting advantages for publishers such as the abilitiy to pre-calculate files and make use of caching infrastructure.
+      </t>
+      <t>
+        However, if a RRDP server throughout time serves differing data for a given session_id and serial number, distinct RP instances (depending on the moment they connected to the RRDP server) would to end up with divergent local repositories.
+        Comparing the server-provided session_id and serial numbers across distinct RP instances would not bring such divergence to light.
+      </t>
+      <t>
+        While the global RPKI is understood to present a loosely consistent view, depending on timing, updating, fetching (see <xref target="RFC7115" section="6"/>), different caches having different data for the same RRDP session at the same serial violates the principle of least astonishment.
+      </t>
+      <t>
+        The <xref target="RFC8182"/> specification does allude to immutability being a property of RRDP files, but doesn't make it clear immutability is an absolute requirement for the RRDP protocol to work well.
+        A future update to <xref target="RFC8182"/> should set a hard rule to establish that the immutability of RRDP files must not be violated after publication, and RPs should check for unexpected mutations.
+      </t>
+    </section>
+
+    <section anchor="detection">
+      <name>Detection of Desynchronization</name>
+      <t>
+        Relying Parties can implement a mechanism to keep a record the serial and hash attribute values in delta elements of the previous successful fetch of an Update Notification File.
+        Then, after the next fetch of the Update Notification File compare whether the delta hash values associated to previously seen serials are different in the newly fetched Update Notification File.
+        If any difference is detected, Delta files were unexpectedly mutated, and the RP should proceed to <xref target="recovery"/>.
+      </t>
+      <t>
+        RP implementations decide how many Delta Files to maximally process before switching to downloading the latest Snapshot File.
+        The same upper bound can be used as a limit to the number of delta element serial and hash values to track.
+      </t>
+    </section>
+
+    <section anchor="recovery">
+      <name>Recovery after Desynchronization</name>
+      <t>
+        Following detection of RRDP session desynchronization, the RP implementation SHOULD issue a warning and SHOULD download the latest Snapshot File, and process it as described in <xref target="RFC8182" section="3.4.3"/>.
+      </t>
+    </section>
+
+    <section anchor="security">
+      <name>Security Considerations</name>
+      <t>
+        Caches in a desynchronized state pose a risk in that they might emit less Validated Payloads than they would otherwise with a consistent copy of the repository.
+        Missing Validated Payloads negatively impact the ability to validate BGP announcements <xref target="RFC6811"/>.
+      </t>
+      <t>
+        <xref target="RFC9286" section="6.6"/> describes the concept of <em>failed fetches</em> and advises RP implementations to continue to use cached versions of objects, but only until such time as they become stale.
+        By detecting whether the remote Repository Server is in an inconsistent state and immediately switching to a using Snapshot File, RPs increase the their likeliness to replace objects before they become stale.
+      </t>
+    </section>
+
+    <section anchor="iana" title="IANA Considerations">
+      <t>
+        No IANA actions required.
+      </t> 
+    </section>
+  </middle>
+
+  <back>
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8182.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9286.xml"/>
+      </references>
+
+      <references>
+        <name>Informative References</name>
+
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6811.xml"/>
+        <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7115.xml"/>
+
+        <reference anchor="rpki-client" target="https://www.rpki-client.org/">
+          <front>
+            <title>rpki-client 8.5</title>
+            <author fullname="Claudio Jeker"/>
+            <author fullname="Job Snijders"/>
+            <author fullname="Kristaps Dzonsons"/>
+            <author fullname="Theo Buehler"/>
+            <date month="July" year="2023" />
+          </front>
+        </reference>
+
+      </references>
+    </references>
+
+    <section anchor="acknowledgements">
+      <name>Acknowledgements</name>
+      <t>
+        During the hallway track at RIPE 86, <contact fullname="Ties de Kock"/> shared the idea for detecting this particular form of RRDP desynchronization, after which <contact fullname="Claudio Jeker"/>, <contact fullname="Job Snijders"/>, and <contact fullname="Theo Buehler"/> produced an implementation based on rpki-client.
+      </t>
+      <t>
+        Equipped with tooling to detect this particular error condition, in subsequent months it became apparent that unexpected delta mutations in the global RPKI repositories do happen from time to time.
+      </t>
+<!--
+      <t>
+        The authors wish to thank
+        <contact fullname="..."/>
+        for feedback.
+      </t>
+-->
+    </section>
+
+    <section removeInRFC="true">
+      <name>Implementation status</name>
+      <t>
+        This section records the status of known implementations of the protocol defined by this specification at the time of posting of this Internet-Draft, and is based on a proposal described in RFC 7942.
+        The description of implementations in this section is intended to assist the IETF in its decision processes in progressing drafts to RFCs.
+        Please note that the listing of any individual implementation here does not imply endorsement by the IETF.
+        Furthermore, no effort has been spent to verify the information presented here that was supplied by IETF contributors.
+        This is not intended as, and must not be construed to be, a catalog of available implementations or their features.
+        Readers are advised to note that other implementations may exist.
+      </t>
+      <t>
+        According to RFC 7942, "this will allow reviewers and working groups to assign due consideration to documents that have the benefit of running code, which may serve as evidence of valuable experimentation and feedback that have made the implemented protocols more mature.
+        It is up to the individual working groups to use this information as they see fit".
+      </t>
+
+      <ul>
+        <li>
+          OpenBSD <xref target="rpki-client"/> 8.5 and higher
+        </li>
+      </ul>
+    </section>
+
+  </back>
+
+</rfc>
