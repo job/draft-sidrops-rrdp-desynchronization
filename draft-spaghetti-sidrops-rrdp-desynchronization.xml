@@ -42,7 +42,10 @@
     <author fullname="Ties de Kock" initials="T." surname="de Kock">
       <organization>RIPE NCC</organization>
       <address>
-        <postal />
+        <postal>
+          <city>Amsterdam</city>
+          <country>Netherlands</country>
+        </postal>
         <email>tdekock@ripe.net</email>
       </address>
     </author>
@@ -107,7 +110,7 @@
       <name>Detection of Desynchronization</name>
       <t>
         Relying Parties can implement a mechanism to keep a record of the serial and hash attribute values in delta elements of the previous successful fetch of an Update Notification File.
-        Then, after the next fetch of the Update Notification File compare whether the delta hash values associated to previously seen serials are different in the newly fetched Update Notification File.
+        Then, after the fetch of a new Update Notification File, the Relying Party should compare if the serial and hash values of previously seen serials match those in the newly fetched file.
         If any difference is detected, Delta files were unexpectedly mutated, and the RP should proceed to <xref target="recovery"/>.
       </t>
       <t>
@@ -119,14 +122,17 @@
     <section anchor="recovery">
       <name>Recovery after Desynchronization</name>
       <t>
-        Following detection of RRDP session desynchronization, the RP implementation SHOULD issue a warning and SHOULD download the latest Snapshot File, and process it as described in <xref target="RFC8182" section="3.4.3"/>.
+        Following the detection of RRDP session desynchronization, the RP implementation SHOULD issue a warning and SHOULD download the latest Snapshot File and process it as described in <xref target="RFC8182" section="3.4.3"/>.
       </t>
     </section>
 
     <section anchor="security">
       <name>Security Considerations</name>
       <t>
-        Caches in a desynchronized state pose a risk in that they might emit fewer Validated Payloads than they would otherwise emit with a consistent copy of the repository.
+        Caches in a desynchronized state pose a risk by emitting different Validated Payloads than they would otherwise emit with a consistent repository copy.
+        Through the interaction of the desynchronization and the failed fetch mechanism described in <xref target="RFC9286"/>, Relying Parties using this cache may (a) spuriously not emit a Validated Payload or (b) emit a Validated Payload that has been withdrawn.
+        Due to the lifetime of RRDP sessions (O(months)), this desynchronization may persist for an extended period.
+
         Missing Validated Payloads negatively impact the ability to validate BGP announcements <xref target="RFC6811"/>.
       </t>
       <t>
