@@ -129,7 +129,9 @@
     <section anchor="security">
       <name>Security Considerations</name>
       <t>
-        Caches in a desynchronized state pose a risk by emitting different Validated Payloads than they would otherwise emit with a consistent repository copy. Through the interaction of the desynchronization and the failed fetch mechanism descrbed in <xref target="RFC9286"/>, Relying Parties using this cache may spuriously emit Validated Payloads the cache may either (a) spuriously not emit a Validated Payload or (b) emit a Validated Payload that has been withdrawn. Due to the lifetime of RRDP sessions (O(months)), this desynchronization may persist for an extended period.
+        Caches in a desynchronized state pose a risk by emitting different Validated Payloads than they would otherwise emit with a consistent repository copy.
+        Through the interaction of the desynchronization and the failed fetch mechanism described in <xref target="RFC9286"/>, Relying Parties using this cache may (a) spuriously not emit a Validated Payload or (b) emit a Validated Payload that has been withdrawn.
+        Due to the lifetime of RRDP sessions (O(months)), this desynchronization may persist for an extended period.
 
         Missing Validated Payloads negatively impact the ability to validate BGP announcements <xref target="RFC6811"/>.
       </t>
