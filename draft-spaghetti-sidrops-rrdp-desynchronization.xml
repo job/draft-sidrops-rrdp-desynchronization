@@ -110,7 +110,7 @@
       <name>Detection of Desynchronization</name>
       <t>
         Relying Parties can implement a mechanism to keep a record of the serial and hash attribute values in delta elements of the previous successful fetch of an Update Notification File.
-        Then, after the fetch of a new Update Notification File, the Relying Party should compare if the serial and hash values of previously seen serials that match those in the newly fetched file.
+        Then, after the fetch of a new Update Notification File, the Relying Party should compare if the serial and hash values of previously seen serials match those in the newly fetched file.
         If any difference is detected, Delta files were unexpectedly mutated, and the RP should proceed to <xref target="recovery"/>.
       </t>
       <t>
