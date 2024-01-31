@@ -117,6 +117,74 @@
         RP implementations decide how many Delta Files to maximally process before switching to downloading the latest Snapshot File.
         The same upper bound can be used as a limit to the number of delta element serial and hash values to track.
       </t>
+
+      <section anchor="example">
+        <name>Example</name>
+        <t>
+          This section contains two versions of a Update Notification File to demonstrate an unexpected mutation.
+          The initial Update Notification File is as following:
+        </t>
+<sourcecode>
+<![CDATA[
+<notification xmlns="http://www.ripe.net/rpki/rrdp" version="1"
+              session_id="fe528335-db5f-48b2-be7e-bf0992d0b5ec"
+              serial="1774">
+  <snapshot uri="https://rrdp.example.net/1774/snapshot.xml"
+       hash="4b5f27b099737b8bf288a33796bfe825fb2014a69fd6aa99080380299952f2e2"/>
+  <delta serial="1774"
+         hash="effac94afd30bbf1cd6e180e7f445a4d4653cb4c91068fa9e7b669d49b5aaa00"
+         uri="https://rrdp.example.net/1774/delta.xml" />
+  <delta serial="1773"
+         hash="731169254dd5de0ede94ba6999bda63b0fae9880873a3710e87a71bafb64761a"
+         uri="https://rrdp.example.net/1773/delta.xml" />
+  <delta serial="1772"
+         hash="d4087585323fd6b7fd899ebf662ef213c469d39f53839fa6241847f4f6ceb939"
+         uri="https://rrdp.example.net/1772/delta.xml />
+</notification>
+]]>
+</sourcecode>
+
+        <t>
+          Based on the above Update Notification File, an RP implementation could record the following state:
+        </t>
+
+<sourcecode anchor="state">
+fe528335-db5f-48b2-be7e-bf0992d0b5ec
+1774 effac94afd30bbf1cd6e180e7f445a4d4653cb4c91068fa9e7b669d49b5aaa00
+1773 731169254dd5de0ede94ba6999bda63b0fae9880873a3710e87a71bafb64761a
+1772 d4087585323fd6b7fd899ebf662ef213c469d39f53839fa6241847f4f6ceb939
+</sourcecode>
+
+        <t>
+          A new version of the Update Notification File is published, as following:
+        </t>
+
+<sourcecode>
+<![CDATA[
+<notification xmlns="http://www.ripe.net/rpki/rrdp" version="1"
+              session_id="fe528335-db5f-48b2-be7e-bf0992d0b5ec"
+              serial="1775">
+  <snapshot uri="https://rrdp.example.net/1775/snapshot.xml"
+       hash="cd430c386deacb04bda55301c2aa49f192b529989b739f412aea01c9a77e5389"/>
+  <delta serial="1775"
+         hash="d199376e98a9095dbcf14ccd49208b4223a28a1327669f89566475d94b2b08cc"
+         uri="https://rrdp.example.net/1775/delta.xml />
+  <delta serial="1774"
+         hash="10ca28480a584105a059f95df5ca8369142fd7c8069380f84ebe613b8b89f0d3"
+         uri="https://rrdp.example.net/1774/delta.xml" />
+  <delta serial="1773"
+         hash="731169254dd5de0ede94ba6999bda63b0fae9880873a3710e87a71bafb64761a"
+         uri="https://rrdp.example.net/1773/delta.xml" />
+</notification>
+]]>
+</sourcecode>
+
+        <t>
+          Using its previously recorded <xref target="state">state</xref>, the RP can compare the hash values for serials 1773 and 1774.
+          For serial 1774, compared to the earlier version of the Update Notification File, a different hash value is now listed, meaning an unexpected delta mutation occurred.
+        </t>
+
+      </section>
     </section>
 
     <section anchor="recovery">
@@ -129,14 +197,18 @@
     <section anchor="security">
       <name>Security Considerations</name>
       <t>
-        Caches in a desynchronized state pose a risk by emitting different Validated Payloads than they would otherwise emit with a consistent repository copy.
-        Through the interaction of the desynchronization and the failed fetch mechanism described in <xref target="RFC9286"/>, Relying Parties using this cache may (a) spuriously not emit a Validated Payload or (b) emit a Validated Payload that has been withdrawn.
-        Due to the lifetime of RRDP sessions (O(months)), this desynchronization may persist for an extended period.
-
-        Missing Validated Payloads negatively impact the ability to validate BGP announcements <xref target="RFC6811"/>.
+        Due to the lifetime of RRDP sessions (often measured in months), desynchronization can persist for an extended period.
       </t>
       <t>
-        <xref target="RFC9286" section="6.6"/> describes the concept of <em>failed fetches</em> and advises RP implementations to continue to use cached versions of objects, but only until such time as they become stale.
+        Caches in a desynchronized state pose a risk by emitting a different set of Validated Payloads than they would otherwise emit with a consistent repository copy.
+        Through the interaction of the desynchronization and the <em>failed fetch</em> mechanism described in <xref target="RFC9286" section="6.6"/>, Relying Parties could spuriously omit Validated Payloads or emit Validated Payloads that the Certification Authority intended to withdrawn.
+        In a desynchronized state, all bets are off.
+      </t>
+      <t>
+        Missing Validated Payloads negatively impact the ability to validate BGP announcements using mechanisms such as described in <xref target="RFC6811"/> and <xref target="I-D.ietf-sidrops-aspa-verification"/>.
+      </t>
+      <t>
+        <xref target="RFC9286" section="6.6"/> advises RP implementations to continue to use cached versions of objects, but only until such time as they become stale.
         By detecting whether the remote Repository Server is in an inconsistent state and then immediately switching to using the latest Snapshot File, RPs increase the probability to successfully replace objects before they become stale.
       </t>
     </section>
@@ -161,10 +233,10 @@
 
       <references>
         <name>Informative References</name>
-
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6811.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7115.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.9286.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-sidrops-aspa-verification.xml"/>
 
         <reference anchor="rpki-client" target="https://www.rpki-client.org/">
           <front>
