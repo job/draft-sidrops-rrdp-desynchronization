@@ -14,7 +14,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="info"
-     docName="draft-spaghetti-sidrops-rrdp-desynchronization-01"
+     docName="draft-spaghetti-sidrops-rrdp-desynchronization-02"
      ipr="trust200902"
      xml:lang="en"
      sortRefs="true"
@@ -61,7 +61,7 @@
 
     <abstract>
       <t>
-        This document describes an approach for Resource Public Key Infrastructure (RPKI) Relying Parties to detect a particular form of RPKI Repository Delta Protocol (RRDP) session desynchronization and how to recover, as implemented in OpenBSD's rpki-client validator and Mikhail Puzanov's rpki-prover.
+        This document describes an approach for Resource Public Key Infrastructure (RPKI) Relying Parties to detect a particular form of RPKI Repository Delta Protocol (RRDP) session desynchronization and how to recover.
       </t>
     </abstract>
   </front>
@@ -77,7 +77,7 @@
       </t>
 
       <t>
-        This document describes an approach for Relying Parties (RPs) to detect a particular form of RRDP session desynchronization and how to recover, as implemented in OpenBSD's rpki-client validator and Mikhail Puzanov's rpki-prover.
+        This document describes an approach for Relying Parties (RPs) to detect a particular form of RRDP session desynchronization and how to recover.
       </t>
 
       <section anchor="requirements">
@@ -257,6 +257,14 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
           </front>
         </reference>
 
+       <reference anchor="FORT-validator" target="https://github.com/NICMx/FORT-validator/compare/main...draft-spaghetti-sidrops-rrdp-desynchronization">
+          <front>
+            <title>FORT validator 1.7.0</title>
+            <author fullname="Alberto Leiva"/>
+            <date month="March" year="2024" />
+          </front>
+        </reference>
+
       </references>
     </references>
 
@@ -295,6 +303,9 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
         </li>
         <li>
           Mikhail Puzanov's <xref target="rpki-prover"/> 0.9.0 and higher
+        </li>
+        <li>
+          FORT project's <xref target="FORT-validator"/> 1.7.0 and higher
         </li>
       </ul>
     </section>
