@@ -197,7 +197,7 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
     <section anchor="security">
       <name>Security Considerations</name>
       <t>
-        Due to the lifetime of RRDP sessions (often measured in months), desynchronization can persist for an extended period.
+        Due to the lifetime of RRDP sessions (often measured in months), desynchronization can persist for an extended period if undetected.
       </t>
       <t>
         Caches in a desynchronized state pose a risk by emitting a different set of Validated Payloads than they would otherwise emit with a consistent repository copy.
