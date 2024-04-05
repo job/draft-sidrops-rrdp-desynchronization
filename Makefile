@@ -1,4 +1,4 @@
-NAME=draft-spaghetti-sidrops-rrdp-desynchronization
+NAME=draft-ietf-sidrops-rrdp-desynchronization
 
 .PHONY: all
 all: drafts

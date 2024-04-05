@@ -14,7 +14,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="info"
-     docName="draft-spaghetti-sidrops-rrdp-desynchronization-02"
+     docName="draft-ietf-sidrops-rrdp-desynchronization-00"
      ipr="trust200902"
      xml:lang="en"
      sortRefs="true"
@@ -276,9 +276,10 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
       </t>
       <t>
         The authors wish to thank
-        <contact fullname="Theo Buehler"/>
-        for their careful review and feedback, and
-        <contact fullname="Mikhail Puzanov"/> for their implementation work.
+        <contact fullname="Theo Buehler"/>,
+        <contact fullname="Mikhail Puzanov"/>, and
+        <contact fullname="Alberto Leiva"/>
+        for their careful review and feedback on this document.
       </t>
     </section>
 
