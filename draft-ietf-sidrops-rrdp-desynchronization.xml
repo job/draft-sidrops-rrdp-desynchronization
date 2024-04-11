@@ -258,10 +258,20 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
         </reference>
 
        <reference anchor="FORT-validator" target="https://github.com/NICMx/FORT-validator/compare/main...draft-spaghetti-sidrops-rrdp-desynchronization">
+         <front>
+           <title>FORT validator 1.7.0</title>
+           <author fullname="Alberto Leiva"/>
+           <date month="March" year="2024" />
+         </front>
+       </reference>
+
+        <reference anchor="Routinator" target="https://github.com/NLnetLabs/routinator/pull/951">
           <front>
-            <title>FORT validator 1.7.0</title>
-            <author fullname="Alberto Leiva"/>
-            <date month="March" year="2024" />
+            <title>Routinator</title>
+            <author>
+              <organization>NLNet Labs</organization>
+            </author>
+            <date/>
           </front>
         </reference>
 
@@ -307,6 +317,9 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
         </li>
         <li>
           FORT project's <xref target="FORT-validator"/> 1.7.0 and higher
+        </li>
+        <li>
+          NLnet Labs' <xref target="Routinator"/> main branch
         </li>
       </ul>
     </section>
