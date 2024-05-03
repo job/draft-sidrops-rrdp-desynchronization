@@ -201,7 +201,7 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
       </t>
       <t>
         Caches in a desynchronized state pose a risk by emitting a different set of Validated Payloads than they would otherwise emit with a consistent repository copy.
-        Through the interaction of the desynchronization and the <em>failed fetch</em> mechanism described in <xref target="RFC9286" section="6.6"/>, Relying Parties could spuriously omit Validated Payloads or emit Validated Payloads that the Certification Authority intended to withdrawn.
+        Through the interaction of the desynchronization and the <em>failed fetch</em> mechanism described in <xref target="RFC9286" section="6.6"/>, Relying Parties could spuriously omit Validated Payloads or emit Validated Payloads that the Certification Authority intended to withdraw.
         In a desynchronized state, all bets are off.
       </t>
       <t>
@@ -287,8 +287,9 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
       <t>
         The authors wish to thank
         <contact fullname="Theo Buehler"/>,
-        <contact fullname="Mikhail Puzanov"/>, and
-        <contact fullname="Alberto Leiva"/>
+        <contact fullname="Mikhail Puzanov"/>,
+        <contact fullname="Alberto Leiva"/>, and
+        <contact fullname="Tom Harrison"/>
         for their careful review and feedback on this document.
       </t>
     </section>
