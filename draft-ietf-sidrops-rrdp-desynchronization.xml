@@ -91,7 +91,7 @@
     <section anchor="immutability">
       <name>Immutability of RRDP files</name>
       <t>
-        <xref target="RFC8182" section="3.1"/> describes how discrete publication events such as the addition, modification, or deletion of one or more repository objects <em>can</em> be communicated as immutable files, highlighting advantages for publishers such as the ability to pre-calculate files and make use of caching infrastructure.
+        <xref target="RFC8182" section="3.1"/> describes how discrete publication events such as the addition, modification, or deletion of one or more repository objects <em>can</em> be communicated as immutable files, highlighting advantages for publishers, such as the ability to pre-calculate files and make use of caching infrastructure.
       </t>
       <t>
         While the global RPKI is understood to present a loosely consistent view, depending on timing, updating, fetching (see <xref target="RFC7115" section="6"/>), different caches having different data for the same RRDP session at the same serial violates the principle of least astonishment.
@@ -101,8 +101,8 @@
         Comparing only the server-provided session_id and latest serial number across distinct RP instances would not bring such divergence to light.
       </t>
       <t>
-        The <xref target="RFC8182"/> specification does allude to immutability being a property of RRDP files, but doesn't make it clear immutability is an absolute requirement for the RRDP protocol to work well.
-        A future update to <xref target="RFC8182"/> should set a hard rule to establish that the immutability of RRDP files must not be violated after publication, and RPs should check for unexpected mutations.
+        The <xref target="RFC8182"/> specification does allude to immutability being a property of RRDP files, but doesn't make it clear that immutability is an absolute requirement for the RRDP protocol to work well.
+        A future update to <xref target="RFC8182"/> should set a hard rule to establish that the immutability of RRDP files must not be violated after publication, and that RPs should check for unexpected mutations.
       </t>
     </section>
 
@@ -110,19 +110,19 @@
       <name>Detection of Desynchronization</name>
       <t>
         Relying Parties can implement a mechanism to keep a record of the serial and hash attribute values in delta elements of the previous successful fetch of an Update Notification File.
-        Then, after the fetch of a new Update Notification File, the Relying Party should compare if the serial and hash values of previously seen serials match those in the newly fetched file.
-        If any difference is detected, Delta files were unexpectedly mutated, and the RP should proceed to <xref target="recovery"/>.
+        Then, after fetching a new Update Notification File, the Relying Party should compare if the serial and hash values of previously seen serials match those in the newly fetched file.
+        If any differences are detected, this means that the Delta files were unexpectedly mutated, and the RP should proceed to <xref target="recovery"/>.
       </t>
       <t>
-        RP implementations decide how many Delta Files to maximally process before switching to downloading the latest Snapshot File.
+        RP implementations decide on the number of Delta Files to process before switching to downloading the latest Snapshot File.
         The same upper bound can be used as a limit to the number of delta element serial and hash values to track.
       </t>
 
       <section anchor="example">
         <name>Example</name>
         <t>
-          This section contains two versions of a Update Notification File to demonstrate an unexpected mutation.
-          The initial Update Notification File is as following:
+          This section contains two versions of an Update Notification File to demonstrate an unexpected mutation.
+          The initial Update Notification File is as follows:
         </t>
 <sourcecode>
 <![CDATA[
@@ -130,16 +130,16 @@
               session_id="fe528335-db5f-48b2-be7e-bf0992d0b5ec"
               serial="1774">
   <snapshot uri="https://rrdp.example.net/1774/snapshot.xml"
-       hash="4b5f27b099737b8bf288a33796bfe825fb2014a69fd6aa99080380299952f2e2"/>
+    hash="4b5f27b099737b8bf288a33796bfe825fb2014a69fd6aa99080380299952f2e2"/>
   <delta serial="1774"
-         hash="effac94afd30bbf1cd6e180e7f445a4d4653cb4c91068fa9e7b669d49b5aaa00"
-         uri="https://rrdp.example.net/1774/delta.xml" />
+    hash="effac94afd30bbf1cd6e180e7f445a4d4653cb4c91068fa9e7b669d49b5aaa00"
+    uri="https://rrdp.example.net/1774/delta.xml" />
   <delta serial="1773"
-         hash="731169254dd5de0ede94ba6999bda63b0fae9880873a3710e87a71bafb64761a"
-         uri="https://rrdp.example.net/1773/delta.xml" />
+    hash="731169254dd5de0ede94ba6999bda63b0fae9880873a3710e87a71bafb64761a"
+    uri="https://rrdp.example.net/1773/delta.xml" />
   <delta serial="1772"
-         hash="d4087585323fd6b7fd899ebf662ef213c469d39f53839fa6241847f4f6ceb939"
-         uri="https://rrdp.example.net/1772/delta.xml />
+    hash="d4087585323fd6b7fd899ebf662ef213c469d39f53839fa6241847f4f6ceb939"
+    uri="https://rrdp.example.net/1772/delta.xml />
 </notification>
 ]]>
 </sourcecode>
@@ -165,16 +165,16 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
               session_id="fe528335-db5f-48b2-be7e-bf0992d0b5ec"
               serial="1775">
   <snapshot uri="https://rrdp.example.net/1775/snapshot.xml"
-       hash="cd430c386deacb04bda55301c2aa49f192b529989b739f412aea01c9a77e5389"/>
+    hash="cd430c386deacb04bda55301c2aa49f192b529989b739f412aea01c9a77e5389"/>
   <delta serial="1775"
-         hash="d199376e98a9095dbcf14ccd49208b4223a28a1327669f89566475d94b2b08cc"
-         uri="https://rrdp.example.net/1775/delta.xml />
+    hash="d199376e98a9095dbcf14ccd49208b4223a28a1327669f89566475d94b2b08cc"
+    uri="https://rrdp.example.net/1775/delta.xml />
   <delta serial="1774"
-         hash="10ca28480a584105a059f95df5ca8369142fd7c8069380f84ebe613b8b89f0d3"
-         uri="https://rrdp.example.net/1774/delta.xml" />
+    hash="10ca28480a584105a059f95df5ca8369142fd7c8069380f84ebe613b8b89f0d3"
+    uri="https://rrdp.example.net/1774/delta.xml" />
   <delta serial="1773"
-         hash="731169254dd5de0ede94ba6999bda63b0fae9880873a3710e87a71bafb64761a"
-         uri="https://rrdp.example.net/1773/delta.xml" />
+    hash="731169254dd5de0ede94ba6999bda63b0fae9880873a3710e87a71bafb64761a"
+    uri="https://rrdp.example.net/1773/delta.xml" />
 </notification>
 ]]>
 </sourcecode>
@@ -205,7 +205,7 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
         In a desynchronized state, all bets are off.
       </t>
       <t>
-        Missing Validated Payloads negatively impact the ability to validate BGP announcements using mechanisms such as described in <xref target="RFC6811"/> and <xref target="I-D.ietf-sidrops-aspa-verification"/>.
+        Missing Validated Payloads negatively impact the ability to validate BGP announcements using mechanisms such as those described in <xref target="RFC6811"/> and <xref target="I-D.ietf-sidrops-aspa-verification"/>.
       </t>
       <t>
         <xref target="RFC9286" section="6.6"/> advises RP implementations to continue to use cached versions of objects, but only until such time as they become stale.
@@ -288,8 +288,9 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
         The authors wish to thank
         <contact fullname="Theo Buehler"/>,
         <contact fullname="Mikhail Puzanov"/>,
-        <contact fullname="Alberto Leiva"/>, and
-        <contact fullname="Tom Harrison"/>
+        <contact fullname="Alberto Leiva"/>,
+        <contact fullname="Tom Harrison"/>, and
+        <contact fullname="Warren Kumari"/>
         for their careful review and feedback on this document.
       </t>
     </section>
