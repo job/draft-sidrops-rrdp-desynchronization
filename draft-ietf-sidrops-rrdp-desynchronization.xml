@@ -13,13 +13,14 @@
 <?rfc subcompact="no"?>
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
-     category="info"
+     category="std"
      docName="draft-ietf-sidrops-rrdp-desynchronization-02"
      ipr="trust200902"
      xml:lang="en"
      sortRefs="true"
      submissionType="IETF"
      consensus="true"
+     updates="8182"
      version="3">
 
   <front>
@@ -62,6 +63,7 @@
     <abstract>
       <t>
         This document describes an approach for Resource Public Key Infrastructure (RPKI) Relying Parties to detect a particular form of RPKI Repository Delta Protocol (RRDP) session desynchronization and how to recover.
+        This document updates RFC 8182.
       </t>
     </abstract>
   </front>
@@ -102,7 +104,6 @@
       </t>
       <t>
         The <xref target="RFC8182"/> specification does allude to immutability being a property of RRDP files, but doesn't make it clear that immutability is an absolute requirement for the RRDP protocol to work well.
-        A future update to <xref target="RFC8182"/> should set a hard rule to establish that the immutability of RRDP files must not be violated after publication, and that RPs should check for unexpected mutations.
       </t>
     </section>
 
@@ -196,6 +197,22 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
       </t>
     </section>
 
+    <section anchor="rfc8182">
+      <name>Changes to RFC 8182</name>
+      <t>
+         The following paragraph is added to <xref target="RFC8182" section="3.4.1"/> "Processing the Update Notification File", after the paragraph which ends "The Relying Party MUST then download and process the Snapshot File specified in the downloaded Update Notification File as described in Section 3.4.3."
+      </t>
+
+      <t>NEW</t>
+      <blockquote>
+        <t>
+          The Relying Party SHOULD compare whether hash values associated with previously seen serials match the hash values in the newly fetched Update Notification File.
+          If any differences are detected, this means that the Delta files were unexpectedly mutated (See <xref target="I-D.ietf-sidrops-rrdp-desynchronization"/>).
+          The Relying Party SHOULD then download and process the Snapshot File specified in the downloaded Update Notification File as described in <xref target="RFC8182" section="3.4.3"/>
+        </t>
+      </blockquote>
+    </section>
+
     <section anchor="security">
       <name>Security Considerations</name>
       <t>
@@ -231,6 +248,27 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
         <xi:include href="https://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8182.xml"/>
+
+        <reference anchor="I-D.ietf-sidrops-rrdp-desynchronization" target="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-rrdp-desynchronization">
+         <front>
+         <title>Detecting RRDP Session Desynchronization</title>
+           <author fullname="Job Snijders" initials="J." surname="Snijders">
+             <organization>Fastly</organization>
+           </author>
+           <author fullname="Ties de Kock" initials="T." surname="de Kock">
+             <organization>RIPE NCC</organization>
+           </author>
+           <date />
+           <abstract>
+             <t>
+               This document describes an approach for Resource Public Key Infrastructure (RPKI) Relying Parties to detect a particular form of RPKI Repository Delta Protocol (RRDP) session desynchronization and how to recover.
+               This document updates RFC 8182.
+             </t>
+           </abstract>
+         </front>
+         <seriesInfo name="Internet-Draft" value="draft-ietf-sidrops-rrdp-desynchronization"/>
+       </reference>
+
       </references>
 
       <references>
