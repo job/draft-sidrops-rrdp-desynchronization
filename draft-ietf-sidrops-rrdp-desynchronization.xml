@@ -189,7 +189,10 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
     <section anchor="recovery">
       <name>Recovery after Desynchronization</name>
       <t>
-        Following the detection of RRDP session desynchronization, the RP implementation SHOULD issue a warning and SHOULD download the latest Snapshot File and process it as described in <xref target="RFC8182" section="3.4.3"/>.
+        Following the detection of RRDP session desynchronization, in order to return to a synchronized state, RP implementations SHOULD issue a warning and SHOULD download the latest Snapshot File and process it as described in <xref target="RFC8182" section="3.4.3"/>.
+      </t>
+      <t>
+        See the <xref target="security"/> for an overview of risks associated with desynchronization.
       </t>
     </section>
 
