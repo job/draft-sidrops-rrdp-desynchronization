@@ -329,8 +329,11 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
         <contact fullname="Mikhail Puzanov"/>,
         <contact fullname="Alberto Leiva"/>,
         <contact fullname="Tom Harrison"/>,
-        <contact fullname="Warren Kumari"/>, and
-        <contact fullname="Behcet Sarikaya"/>
+        <contact fullname="Warren Kumari"/>,
+        <contact fullname="Behcet Sarikaya"/>,
+        <contact fullname="Murray Kucherawy"/>,
+        <contact fullname="Éric Vyncke"/>, and
+        <contact fullname="Roman Danyliw"/>
         for their careful review and feedback on this document.
       </t>
     </section>
