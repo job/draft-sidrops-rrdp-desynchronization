@@ -114,10 +114,6 @@
         Then, after fetching a new Update Notification File, the Relying Party should compare if the serial and hash values of previously seen serials match those in the newly fetched file.
         If any differences are detected, this means that the Delta files were unexpectedly mutated, and the RP should proceed to <xref target="recovery"/>.
       </t>
-      <t>
-        RP implementations decide on the number of Delta Files to process before switching to downloading the latest Snapshot File.
-        The same upper bound can be used as a limit to the number of delta element serial and hash values to track.
-      </t>
 
       <section anchor="example">
         <name>Example</name>
