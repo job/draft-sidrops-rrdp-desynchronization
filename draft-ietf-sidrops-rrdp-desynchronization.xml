@@ -14,7 +14,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std"
-     docName="draft-ietf-sidrops-rrdp-desynchronization-03"
+     docName="draft-ietf-sidrops-rrdp-desynchronization-04"
      ipr="trust200902"
      xml:lang="en"
      sortRefs="true"
@@ -205,8 +205,8 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
       <t>NEW</t>
       <blockquote>
         <t>
-          The Relying Party SHOULD compare whether hash values associated with previously seen serials match the hash values in the newly fetched Update Notification File.
-          If any differences are detected, this means that the Delta files were unexpectedly mutated (See <xref target="I-D.ietf-sidrops-rrdp-desynchronization"/>).
+          If the session_id matches the last known session_id, the Relying Party SHOULD compare whether hash values associated with previously seen files for serials match the hash values of the corresponding serials in the newly fetched Update Notification File.
+          If any differences are detected, this means that files were unexpectedly mutated (See <xref target="I-D.ietf-sidrops-rrdp-desynchronization"/>).
           The Relying Party SHOULD then download and process the Snapshot File specified in the downloaded Update Notification File as described in <xref target="RFC8182" section="3.4.3"/>
         </t>
       </blockquote>
@@ -332,8 +332,9 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
         <contact fullname="Warren Kumari"/>,
         <contact fullname="Behcet Sarikaya"/>,
         <contact fullname="Murray Kucherawy"/>,
-        <contact fullname="Éric Vyncke"/>, and
-        <contact fullname="Roman Danyliw"/>
+        <contact fullname="Éric Vyncke"/>,
+        <contact fullname="Roman Danyliw"/>, and
+        <contact fullname="Tim Bruijnzeels"/>
         for their careful review and feedback on this document.
       </t>
     </section>
