@@ -14,7 +14,7 @@
 
 <rfc xmlns:xi="http://www.w3.org/2001/XInclude"
      category="std"
-     docName="draft-ietf-sidrops-rrdp-desynchronization-04"
+     docName="draft-ietf-sidrops-rrdp-desynchronization-05"
      ipr="trust200902"
      xml:lang="en"
      sortRefs="true"
@@ -79,7 +79,7 @@
       </t>
 
       <t>
-        This document describes an approach for Relying Parties (RPs) to detect a particular form of RRDP session desynchronization and how to recover.
+        This document describes an approach for Relying Parties (RPs) to detect a form of RRDP session desynchronization where the hash of a delta for a given serial number and session_id have mutated from the previous Update Notification File and how to recover.
       </t>
 
       <section anchor="requirements">
@@ -220,7 +220,7 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
       <t>
         Caches in a desynchronized state pose a risk by emitting a different set of Validated Payloads than they would otherwise emit with a consistent repository copy.
         Through the interaction of the desynchronization and the <em>failed fetch</em> mechanism described in <xref target="RFC9286" section="6.6"/>, Relying Parties could spuriously omit Validated Payloads or emit Validated Payloads that the Certification Authority intended to withdraw.
-        In a desynchronized state, all bets are off.
+        As a result, due to the desynchronized state, route decision making processes might consider route announcements intended for exclusion as either "unknown" or "invalid" for an indeterminate period.
       </t>
       <t>
         Missing Validated Payloads negatively impact the ability to validate BGP announcements using mechanisms such as those described in <xref target="RFC6811"/> and <xref target="I-D.ietf-sidrops-aspa-verification"/>.
@@ -260,7 +260,7 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
            <date />
            <abstract>
              <t>
-               This document describes an approach for Resource Public Key Infrastructure (RPKI) Relying Parties to detect a particular form of RPKI Repository Delta Protocol (RRDP) session desynchronization and how to recover.
+               This document describes an approach for Resource Public Key Infrastructure (RPKI) Relying Parties (RPs) to detect a form of RPKI Repository Delta Protocol (RRDP) session desynchronization where the hash of a Delta for a given serial number and session_id have mutated compared to the previous Update Notification File and how to recover.
                This document updates RFC 8182.
              </t>
            </abstract>
@@ -333,8 +333,9 @@ fe528335-db5f-48b2-be7e-bf0992d0b5ec
         <contact fullname="Behcet Sarikaya"/>,
         <contact fullname="Murray Kucherawy"/>,
         <contact fullname="Éric Vyncke"/>,
-        <contact fullname="Roman Danyliw"/>, and
-        <contact fullname="Tim Bruijnzeels"/>
+        <contact fullname="Roman Danyliw"/>,
+        <contact fullname="Tim Bruijnzeels"/>, and
+        <contact fullname="Michael Hollyman"/>
         for their careful review and feedback on this document.
       </t>
     </section>
